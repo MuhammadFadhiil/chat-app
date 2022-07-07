@@ -1,0 +1,53 @@
+version: '3'
+services:
+  frontend:
+    container_name: chatapp_fe
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - 8080:80
+    networks:
+      - chatapp
+    depends_on:
+      - backend
+  
+  backend:
+    container_name: chatapp_be
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    env_file: ./backend/.env
+    ports:
+      - 3000:3000
+    environment:
+      - DB_HOST=chatapp-mongodb
+      - DB_USER=root
+      - DB_PASSWORD=ch4t4pp
+      - DB_NAME=chat-app
+      - DB_PORT=27017
+    networks:
+      - chatapp
+    depends_on:
+      - mongodb
+  
+  chatapp-mongodb:
+    image: mongo:5.0.2
+    restart: unless-stopped
+    env_file: ./backend/.env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=ch4t4pp
+    ports:
+      - 27017:27017
+    volumes:
+      - db:/data/db
+    networks:
+      - chatapp
+
+networks:
+  chatapp:
+    driver: bridge
+
+volumes:
+  db:

@@ -14,6 +14,11 @@ app.use(express.json())
 app.use('/api/room', room);
 app.use('/api/chat', chat);
 
+// validate the service run
+app.get('/health', (req, res) => {
+  res.send('chat app backend already up')
+})
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
