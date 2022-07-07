@@ -36,5 +36,5 @@ Go to the project directory
 
 ### Before start chat
 
-- Create new room (POTS /api/room)
+- Create new room (POST /api/room)
 - Copy the room id, and use it as roomId on the join room page
